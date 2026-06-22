@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: logos
       POSTGRES_DB: logos_copilot
     ports:
-      - "5433:5432"          # host:container — 5433 avoids clashing with a local Postgres
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/00-schema.sql:ro
@@ -21,27 +21,30 @@ services:
     build: .
     environment:
       DATABASE_URL: postgresql://logos:logos@db:5432/logos_copilot
-      EMBEDDER: ${EMBEDDER:-hash}
-      MCP_PORT: "8000"
+      MCP_HOST: "0.0.0.0"            # reachable from host (auth guard satisfied by AUTH_TOKEN)
+      AUTH_TOKEN: ${AUTH_TOKEN}
+      EMBEDDER: fastembed
+    ports:
+      - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
 
-  caddy:
-    image: caddy:2
-    ports:
-      - "80:80"
-      - "443:443"
+  web:
+    build: .
+    command: python -m logos_copilot.web
     environment:
-      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:-localhost}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
+      DATABASE_URL: postgresql://logos:logos@db:5432/logos_copilot
+      WEB_HOST: "0.0.0.0"
+      AUTH_TOKEN: ${AUTH_TOKEN}
+      EMBEDDER: fastembed
+    ports:
+      - "8800:8800"
     depends_on:
-      - server
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
   pgdata: {}
-  caddy_data: {}
