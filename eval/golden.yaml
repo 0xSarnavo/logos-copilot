@@ -1,0 +1,24 @@
+# Golden retrieval set for the CI eval gate. Each case runs through search() and passes if a result
+# matching `expect` appears in the top-k. Grounded in ingested recipes + the Codex SDK + specs.
+# expect keys: component | kind | path_contains | url_contains (all provided must match one result).
+cases:
+  - query: "store a file in Codex and share the CID over Waku"
+    expect: { kind: recipe, path_contains: codex-waku }
+  - query: "waku lightPush send broadcast content topic to peers"
+    expect: { kind: recipe, path_contains: codex-waku }
+  - query: "Codex SDK upload returns SafeValue error as value not try catch"
+    expect: { kind: recipe, path_contains: codex-waku }
+  - query: "run a local Logos Blockchain node and its working HTTP API endpoints"
+    expect: { kind: recipe, path_contains: run-local-logos-node }
+  - query: "cryptarchia proof of leadership leader_key is not a wallet"
+    expect: { kind: recipe, path_contains: run-local-logos-node }
+  - query: "get testnet funds from the faucet for a wallet key"
+    expect: { kind: recipe, path_contains: run-local-logos-node }
+  - query: "scaffold a runnable LEZ Logos Execution Zone app with the lgs CLI"
+    expect: { kind: recipe, path_contains: scaffold-lez }
+  - query: "lgs create localnet start deploy a program"
+    expect: { kind: recipe, path_contains: scaffold-lez }
+  - query: "NodeUploadStrategy BrowserUploadStrategy upload data"
+    expect: { component: logos-storage }
+  - query: "Codex node REST API POST /data GET /data/{cid}/network"
+    expect: { component: logos-storage }

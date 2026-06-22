@@ -1,0 +1,5 @@
+# Free automatic HTTPS (Let's Encrypt) in front of the MCP server.
+# Set PUBLIC_DOMAIN in .env (e.g. a free DuckDNS subdomain pointing at the VM's public IP).
+{$PUBLIC_DOMAIN} {
+	reverse_proxy server:8000
+}

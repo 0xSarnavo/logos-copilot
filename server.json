@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.0xsarnavo/logos-copilot",
+  "description": "Self-updating MCP + RAG knowledge server for the Logos ecosystem — cited, version-pinned, freshness-stamped docs/specs/code + build/integration help.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/0xSarnavo/logos-copilot",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/0xSarnavo/logos-copilot",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://YOUR-HOST/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <token> when the server is configured with AUTH_TOKEN",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
