@@ -7,7 +7,7 @@ from __future__ import annotations
 # id, canonical, current_repo, [aliases...], deprecation_note(for legacy aliases)
 SEED: list[tuple[str, str, str, list[str], str]] = [
     (
-        "logos-blockchain", "Logos Blockchain", "logos-blockchain/logos-blockchain",
+        "logos-blockchain", "Logos Network", "logos-blockchain/logos-blockchain",
         ["nomos", "logos-co/nomos"],
         "'Nomos' is the legacy name; the project is now Logos Blockchain (logos-blockchain org).",
     ),
@@ -43,9 +43,12 @@ def resolve(name: str) -> dict | None:
         alias_l = [a.lower() for a in aliases]
         if key == cid.lower() or key == canonical.lower() or key in alias_l:
             is_legacy = key in alias_l
+            former = aliases[0].title() if aliases else None   # first alias = the legacy name
             return {
                 "component_id": cid,
                 "canonical_name": canonical,
+                "display_name": f"{canonical} (formerly {former})" if former else canonical,
+                "former_name": former,
                 "current_repo": repo,
                 "queried_as": name,
                 "is_legacy_name": is_legacy,
